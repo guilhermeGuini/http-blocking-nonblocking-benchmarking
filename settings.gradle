@@ -1,2 +1,5 @@
 rootProject.name = 'http-blocking-nonblocking-benchmarking'
+include 'server'
+include 'clientblock'
+include 'clientnoblock'
 
