@@ -8,7 +8,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 @RestController
@@ -18,12 +20,24 @@ public class NoBlockController {
     @Autowired
     private AsyncService asyncService;
 
-    @PostMapping("/async")
-    public List<Integer> async() throws ExecutionException, InterruptedException {
+    @PostMapping("/asyncGet")
+    public List<Integer> asyncGet() throws ExecutionException, InterruptedException {
         var values = asyncService.postForObject().get();
         values.addAll(asyncService.postForObject().get());
 
         return values;
+    }
+
+    @PostMapping("/async")
+    public CompletableFuture<ArrayList<Integer>> async() throws ExecutionException, InterruptedException {
+        var response = new ArrayList<Integer>();
+
+        return asyncService.postForObject().thenApply(result -> {
+            response.addAll(result);
+
+            asyncService.postForObject().thenApply(response::addAll);
+            return response;
+        });
     }
 
     @PostMapping("/webclient")

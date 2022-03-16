@@ -13,7 +13,7 @@ public class ServerController {
     @PostMapping
     public List<Integer> doAnything() throws InterruptedException {
 
-        Thread.sleep(1200L);
+        Thread.sleep(100L);
 
         return List.of(1, 2, 3, 4, 5, 6, 7, 8, 1, 22, 3, 123, 123, 14, 6436, 73);
     }
